@@ -15,7 +15,7 @@ db.sequelize.sync({force: true}).then(function () {
 const app = new Koa();
 
 
-//cookie 加密(签名)秘钥, 启用session
+//cookie. use session
 app.keys = ['secret key'];
 //session config
 const CONFIG = {
@@ -31,7 +31,8 @@ const CONFIG = {
 };
 app.use(session(CONFIG, app));
 
-//启用koa-body
+
+//use koa-body
 const uploadDirPath = path.resolve(__dirname, '../uploads');
 const bodyParserConfig = {
     multipart: true,
@@ -43,12 +44,14 @@ const bodyParserConfig = {
 };
 app.use(bodyParser(bodyParserConfig));
 
-// authentication,加载passport设置
-const passport = require('./service/authentication');
+
+// authentication, load passport config
+const passport = require('./middleware/authentication');
 app.use(passport.initialize());
 app.use(passport.session());
 
-//加载路由设置
+
+// use router
 const router = require('./router');
 router.all('404', '*', ctx => {
     ctx.status = 404;

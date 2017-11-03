@@ -10,6 +10,9 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING,
             unique: true,
             allowNull: false,
+            // validate: {
+            //     isEmail: false
+            // }
         },
         password: {
             type: DataTypes.STRING,
@@ -19,6 +22,9 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING,
             unique: true,
             allowNull: false,
+            // validate: {
+            //     isEmail: true
+            // }
         }
     });
 
