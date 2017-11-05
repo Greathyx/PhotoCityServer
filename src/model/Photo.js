@@ -34,6 +34,12 @@ module.exports = function (sequelize, DataTypes) {
             foreignKey: 'photoId',
             otherKey: 'tagId'
         });
+        Photo.belongsToMany(models.User, {
+            as: 'lovers',
+            through: 'photo_lover',
+            foreignKey: 'photoId',
+            otherKey: 'loverId'
+        });
         // use author as alias for User
         // add User.id named authorId as foreign key to Photo
         Photo.belongsTo(models.User, {as: 'author', foreignKey: 'authorId'});

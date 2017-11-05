@@ -37,6 +37,7 @@ module.exports = function (sequelize, DataTypes) {
         });
         // add User.id named authorId as foreign key to Photo
         User.hasMany(models.Photo, {as: 'photos', foreignKey: 'authorId'});
+        User.hasMany(models.Photo, {as: 'likedPhotos', foreignKey: 'loverId'});
     };
 
     return User;
