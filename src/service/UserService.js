@@ -14,7 +14,7 @@ const UserModel = require('../model').User;
  *      occupied_username: the username is occupied
  *      occupied_email: the email is occupied
  *      success: succeed to register
- *      error: something go wrong
+ *      error: something goes wrong
  *
  */
 async function addUser(user) {

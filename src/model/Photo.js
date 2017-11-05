@@ -27,9 +27,17 @@ module.exports = function (sequelize, DataTypes) {
         },
     });
 
-    // Photo.associate = function(models) {
-    //
-    // };
+    Photo.associate = function (models) {
+        Photo.belongsToMany(models.Tag, {
+            as: 'photoTags',
+            through: 'photo_tag',
+            foreignKey: 'photoId',
+            otherKey: 'tagId'
+        });
+        // use author as alias for User
+        // add User.id named authorId as foreign key to Photo
+        Photo.belongsTo(models.User, {as: 'author', foreignKey: 'authorId'});
+    };
 
     return Photo;
 };

@@ -10,9 +10,6 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING,
             unique: true,
             allowNull: false,
-            // validate: {
-            //     isEmail: false
-            // }
         },
         password: {
             type: DataTypes.STRING,
@@ -22,15 +19,25 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING,
             unique: true,
             allowNull: false,
-            // validate: {
-            //     isEmail: true
-            // }
         }
     });
 
-    // User.associate = function(models) {
-    //
-    // };
+    User.associate = function (models) {
+        User.belongsToMany(models.User, {
+            as: 'following',
+            through: 'follow_relations',
+            foreignKey: 'followerId',
+            otherKey: 'followingId'
+        });
+        User.belongsToMany(models.User, {
+            as: 'follower',
+            through: 'follow_relations',
+            foreignKey: 'followingId',
+            otherKey: 'followerId'
+        });
+        // add User.id named authorId as foreign key to Photo
+        User.hasMany(models.Photo, {as: 'photos', foreignKey: 'authorId'});
+    };
 
     return User;
 };
