@@ -2,6 +2,7 @@ const Koa = require('koa');
 const path = require('path');
 const bodyParser = require('koa-body');
 const session = require('koa-session');
+var cors = require('koa2-cors');
 
 
 //init the database config, run the code only
@@ -14,6 +15,20 @@ db.sequelize.sync({force: true}).then(function () {
 
 const app = new Koa();
 
+
+app.use(cors({
+    origin: function (ctx) {
+        if (ctx.url === '/test') {
+            return false;
+        }
+        return '*';
+    },
+    exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
+    maxAge: 5,
+    credentials: true,
+    allowMethods: ['GET', 'POST', 'DELETE'],
+    allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
+}));
 
 //cookie. use session
 app.keys = ['secret key'];
@@ -46,7 +61,7 @@ app.use(bodyParser(bodyParserConfig));
 
 
 // authentication, load passport config
-const passport = require('./middleware/authentication');
+const passport = require('./middleware/Authentication');
 app.use(passport.initialize());
 app.use(passport.session());
 
