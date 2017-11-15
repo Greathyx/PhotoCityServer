@@ -100,4 +100,11 @@ router.get('/testAuth', isAuthenticated, ctx => {
 });
 
 
+router.post('/likePhoto', isAuthenticated, ctx => {
+
+    let fields = ctx.request.body.fields;
+
+
+});
+
 module.exports = router;
