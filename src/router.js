@@ -118,4 +118,11 @@ router.post('/uploadPhotos', ctx => {
 });
 
 
+router.post('/likePhoto', isAuthenticated, ctx => {
+
+    let fields = ctx.request.body.fields;
+
+
+});
+
 module.exports = router;
