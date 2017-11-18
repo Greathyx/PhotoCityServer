@@ -2,7 +2,8 @@ const Koa = require('koa');
 const path = require('path');
 const bodyParser = require('koa-body');
 const session = require('koa-session');
-var cors = require('koa2-cors');
+const cors = require('koa2-cors');
+const staticServe = require('koa-static');
 
 
 //init the database config, run the code only
@@ -16,23 +17,32 @@ db.sequelize.sync({force: true}).then(function () {
 const app = new Koa();
 
 
+// allow cross domain access
 app.use(cors({
     origin: function (ctx) {
-        if (ctx.url === '/test') {
-            return false;
-        }
-        return '*';
+        // if (ctx.url === '/test') {
+        //     return false;
+        // }
+        // return '*';
+        return 'http://localhost:8000';
     },
     exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
     maxAge: 5,
     credentials: true,
     allowMethods: ['GET', 'POST', 'DELETE'],
-    allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    allowHeaders: ['Content-Type', 'Authorization', 'Accept', 'Cache-Control', 'X-Requested-With'],
 }));
 
-//cookie. use session
+
+// static file serving
+// http url(e.g.): http://127.0.0.1:3000/upload_db5f2a1f91f5e26ac5958611950153fd.jpg
+let imgPath = path.resolve(__dirname, '../uploads');
+app.use(staticServe(imgPath));
+
+
+// cookie. use session
 app.keys = ['secret key'];
-//session config
+// session config
 const CONFIG = {
     key: 'koa:sess', /** (string) cookie key (default is koa:sess) */
     /** (number || 'session') maxAge in ms (default is 1 days) */
@@ -47,7 +57,7 @@ const CONFIG = {
 app.use(session(CONFIG, app));
 
 
-//use koa-body
+// use koa-body
 const uploadDirPath = path.resolve(__dirname, '../uploads');
 const bodyParserConfig = {
     multipart: true,

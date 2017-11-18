@@ -1,6 +1,7 @@
 var router = require('koa-router')();
 const passport = require('koa-passport');
 const UserService = require('./service/UserService');
+const hostUrl = require('./utils/hostUrl');
 
 /**
  *
@@ -68,7 +69,8 @@ router.post('/register', async ctx => {
  */
 router.get('/logout', ctx => {
     ctx.logout();
-    ctx.body = {auth: ctx.isAuthenticated(), user: ctx.state.user}
+    ctx.body = {auth: ctx.isAuthenticated(), user: ctx.state.user};
+    ctx.response.body = {auth: ctx.isAuthenticated()};
 });
 
 
@@ -86,9 +88,9 @@ var isAuthenticated = (ctx, next) => {
     if (ctx.isAuthenticated())
         return next();
     else
-    //ctx.redirect('/login');
-        ctx.body = {message: 'Please login first!'};
+        ctx.response.body = {message: 'Please login first!'};
 };
+
 
 /**
  *
@@ -96,7 +98,23 @@ var isAuthenticated = (ctx, next) => {
  *
  */
 router.get('/testAuth', isAuthenticated, ctx => {
-    ctx.body = {message: 'You have logged in.'};
+    ctx.response.body = {message: 'You have logged in.'};
+});
+
+
+/**
+ *
+ * upload photos route
+ *
+ * accept formData: {file[type=file]: value}
+ *
+ */
+router.post('/uploadPhotos', ctx => {
+    let fields = ctx.request.body.files;
+    let absoluteUrl = fields.file.path;
+    let hostImgName = absoluteUrl.substring(absoluteUrl.lastIndexOf('/'), absoluteUrl.length);
+    // console.log(hostImgName);
+    ctx.body = {imgUrl: hostUrl.ip + hostImgName};
 });
 
 
