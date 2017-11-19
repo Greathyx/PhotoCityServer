@@ -3,6 +3,7 @@ const passport = require('koa-passport');
 const UserService = require('./service/UserService');
 const hostUrl = require('./utils/hostUrl');
 const PhotoService = require('./service/PhotoService');
+const PostService = require('./service/PostService');
 
 
 /**
@@ -122,6 +123,11 @@ router.post('/preLoad', ctx => {
 });
 
 
+/**
+ *
+ * upload one photo a time route
+ *
+ */
 router.post('/uploadPhoto', async ctx => {
     let fields = ctx.request.body.fields;
 
@@ -131,11 +137,36 @@ router.post('/uploadPhoto', async ctx => {
         sImg: fields.sImg,
         bImg: fields.bImg,
         tags: fields.tags,
+        postId: fields.postId,
         authorId: fields.authorId
     });
 
-    if (result !== null) {
+    if (result.id !== undefined) {
+        console.log(result);
         ctx.response.body = {message: 'success'}
+    } else {
+        ctx.response.body = {message: 'error'};
+        ctx.throw(401);
+    }
+});
+
+
+/**
+ *
+ * upload a post route
+ *
+ */
+router.post('/uploadPost', async ctx => {
+    let fields = ctx.request.body.fields;
+
+    let result = await PostService.addPost({
+        description: fields.description,
+        authorId: fields.authorId
+    });
+
+    if (result !== undefined) {
+        // console.log(result);
+        ctx.response.body = {message: 'success', postId: result}
     } else {
         ctx.response.body = {message: 'error'};
         ctx.throw(401);
@@ -146,7 +177,6 @@ router.post('/uploadPhoto', async ctx => {
 router.post('/likePhoto', isAuthenticated, ctx => {
 
     let fields = ctx.request.body.fields;
-
 
 });
 

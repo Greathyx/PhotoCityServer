@@ -33,12 +33,7 @@ module.exports = function (sequelize, DataTypes) {
     });
 
     Photo.associate = function (models) {
-        // Photo.belongsToMany(models.Tag, {
-        //     as: 'photoTags',
-        //     through: 'photo_tag',
-        //     foreignKey: 'photoId',
-        //     otherKey: 'tagId'
-        // });
+
         Photo.belongsToMany(models.User, {
             as: 'lovers',
             through: 'photo_lover',
@@ -48,6 +43,7 @@ module.exports = function (sequelize, DataTypes) {
         // use author as alias for User
         // add User.id named authorId as foreign key to Photo
         Photo.belongsTo(models.User, {as: 'author', foreignKey: 'authorId'});
+        Photo.belongsTo(models.Post, {as: 'post', foreignKey: 'postId'});
     };
 
     return Photo;

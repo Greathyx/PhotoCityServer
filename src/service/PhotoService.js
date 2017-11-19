@@ -21,9 +21,11 @@ async function addPhoto(photo) {
         sImg: photo.sImg,
         bImg: photo.bImg,
         tags: photo.tags,
+        postId: photo.postId,
         authorId: photo.authorId
     });
-    return result.id;
+    // return result.id;
+    return result;
 }
 
 /**
