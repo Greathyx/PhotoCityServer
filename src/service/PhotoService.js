@@ -2,9 +2,11 @@ const PhotoModel = require('../model').Photo;
 
 /**
  * photo:{
+ *      id: string
  *      origin: string
  *      sImg: string
  *      bImg: string
+ *      tags: string
  * }
  *
  * return:
@@ -13,12 +15,15 @@ const PhotoModel = require('../model').Photo;
  */
 async function addPhoto(photo) {
 
-    await PhotoModel.create({
+    let result = await PhotoModel.create({
+        id: photo.pid,
         origin: photo.origin,
         sImg: photo.sImg,
-        bImg: photo.bImg
+        bImg: photo.bImg,
+        tags: photo.tags,
+        authorId: photo.authorId
     });
-
+    return result.id;
 }
 
 /**
@@ -73,3 +78,7 @@ async function cancelLikePhoto(id) {
     photo.decrement('liked_times');
 
 }
+
+module.exports = {
+    addPhoto,
+};

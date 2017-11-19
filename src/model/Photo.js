@@ -2,9 +2,10 @@ module.exports = function (sequelize, DataTypes) {
 
     var Photo = sequelize.define("Photo", {
         id: {
-            type: DataTypes.INTEGER,
+            // type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             primaryKey: true,
-            autoIncrement: true,
+            // autoIncrement: true,
         },
         origin: {
             type: DataTypes.STRING,
@@ -25,15 +26,19 @@ module.exports = function (sequelize, DataTypes) {
             unique: true,
             allowNull: false,
         },
+        tags: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        }
     });
 
     Photo.associate = function (models) {
-        Photo.belongsToMany(models.Tag, {
-            as: 'photoTags',
-            through: 'photo_tag',
-            foreignKey: 'photoId',
-            otherKey: 'tagId'
-        });
+        // Photo.belongsToMany(models.Tag, {
+        //     as: 'photoTags',
+        //     through: 'photo_tag',
+        //     foreignKey: 'photoId',
+        //     otherKey: 'tagId'
+        // });
         Photo.belongsToMany(models.User, {
             as: 'lovers',
             through: 'photo_lover',
